@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_time_alarm"
+        android:onClick="setTime"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/set_new_locate_alarm"
+        android:onClick="setLocation"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/location_alarms_list"
+        android:layout_marginTop="10sp"
+        android:layout_marginBottom="10sp"
+        android:textSize="20sp"/>
+    <ListView
+        android:id="@+id/listpending"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        </ListView>
+
+</LinearLayout>

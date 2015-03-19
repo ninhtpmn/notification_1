@@ -15,19 +15,17 @@ import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 
-public class MainActivity extends ActionBarActivity {
+public class SetTimeAlarm extends ActionBarActivity {
 
    public EditText year, month, day, hour, minute, second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.set_time_alarm);
 
         year = (EditText) findViewById(R.id.year);
         month = (EditText) findViewById(R.id.month);

@@ -6,10 +6,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.telephony.SmsManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
 
 /**
  * Created by ninh on 16/03/2015.
@@ -21,14 +18,28 @@ public class AlarmReceiver extends BroadcastReceiver{
         // TODO Auto-generated method stub
         Log.i("SMSSEND", "DK,FL");
 
-        String title = "Notification";
-        String subject = "Chuc mung ban da trung giai";
-        String body = "Chuc ban may man lan sau";
+        String title = context.getString(R.string.title);
+        String subject = context.getString(R.string.subject);
+        String body = context.getString(R.string.body);
         NM=(NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
         Notification notify=new Notification(android.R.drawable.stat_notify_more,title,System.currentTimeMillis());
-        PendingIntent pending=PendingIntent.getActivity(context,0, new Intent(),0);
+
+        Intent notificationIntent = new Intent(context, Popup.class);
+
+        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP  | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        notificationIntent.putExtra("title",title);
+        notificationIntent.putExtra("subject", subject);
+        notificationIntent.putExtra("body",body);
+
+        PendingIntent pending=PendingIntent.getActivity(context,0, notificationIntent,
+                PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
+
         notify.setLatestEventInfo(context,subject,body,pending);
+        notify.flags |= Notification.FLAG_AUTO_CANCEL;
         NM.notify(0, notify);
+
+
     }
 
 
