@@ -14,7 +14,7 @@ public class Popup extends ActionBarActivity{
     public static final String EXTRA_SUBJECT = "subject";
     public static final String EXTRA_BODY = "body";
 
-    TextView subject, body;
+    private TextView subject, body;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

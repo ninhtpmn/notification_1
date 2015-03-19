@@ -1,5 +1,6 @@
 package com.example.ninh.notification;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
@@ -27,18 +28,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
  */
 public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCallback{
 
-    GoogleMap mMap;
-    Boolean changeCamera = false;
-    Boolean hasMarker = false;
-    LinearLayout optionsbar;
-    Marker marker;
+    public static final String ID= "ID";
+    public static final String MARKER= "Marker";
 
-    public static final String MyPREFERENCES = "MyPrefs" ;
-    public static final String LAT = "LAT";
-    public static final String LNG = "LNG";
-
-    SharedPreferences sharedpreferences;
-
+    private GoogleMap mMap;
+    private Boolean changeCamera = false;
+    private Boolean hasMarker = false;
+    private LinearLayout optionsbar;
+    private Marker marker;
+    private int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +48,11 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
         GetLocation gl = new GetLocation(this);
         if(!gl.canGetLocation()) gl.showSettingsAlert();
 
+
+        Bundle extras = getIntent().getExtras();
+        id = extras.getInt(ID);
+
+        DBHelper mydb = new DBHelper(this);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
@@ -86,6 +89,17 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
         }
 
 
+        if(id!=0)
+        {
+            LatLng latLng = mydb.getLatLng(id);
+            marker = mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(MARKER)
+                    .draggable(true)
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+            hasMarker = true;
+            optionsbar.setVisibility(View.VISIBLE);
+        }
 
         mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
             @Override
@@ -112,7 +126,7 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
                 if(hasMarker == false) {
                     marker = mMap.addMarker(new MarkerOptions()
                             .position(latLng)
-                            .title("Marker")
+                            .title(MARKER)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                     hasMarker = true;
@@ -166,12 +180,13 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
 
     public void accept(View v) {
 
-        sharedpreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putFloat(LAT, (float)marker.getPosition().latitude);
-        editor.putFloat(LNG, (float)marker.getPosition().longitude);
-        editor.commit();
+        final DBHelper mydb = new DBHelper(this);
+        if(id==0)
+        mydb.insertLocation(marker.getPosition().latitude, marker.getPosition().longitude);
+        else
+        mydb.updateLocation(id, marker.getPosition().latitude, marker.getPosition().longitude);
 
+        Toast.makeText(this, getString(R.string.toast_message_set), Toast.LENGTH_LONG).show();
         startService(new Intent(getBaseContext(), MyService.class));
 
     }
