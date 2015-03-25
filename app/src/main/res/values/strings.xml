@@ -6,4 +6,8 @@
     <string name="title">Thong Bao</string>
     <string name="subject">Chuc mung ban da trung giai</string>
     <string name="body">Chuc ban may man lan sau</string>
+    <string name="set_time_alarm">Set Time Alarm</string>
+    <string name="set_locate_alarm">Set Location Alarm</string>
+    <string name="title_marker">My Location</string>
+    <string name="google_api_key">AIzaSyDM1tGPDILZ92M0Ukn_c9BL_REoO8BPjC8</string>
 </resources>
