@@ -1,17 +1,23 @@
 package com.example.ninh.notification;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -23,11 +29,26 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
 
     GoogleMap mMap;
     Boolean changeCamera = false;
+    Boolean hasMarker = false;
+    LinearLayout optionsbar;
+    Marker marker;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String LAT = "LAT";
+    public static final String LNG = "LNG";
+
+    SharedPreferences sharedpreferences;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.set_location_alarm);
+
+        optionsbar = (LinearLayout)findViewById(R.id.optionsbar);
+
+        GetLocation gl = new GetLocation(this);
+        if(!gl.canGetLocation()) gl.showSettingsAlert();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -49,8 +70,7 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
                     if(!changeCamera) {
 
                         mMap.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude()))
-                                .title(getString(R.string.title_marker))
-                                .draggable(true));
+                                .title(getString(R.string.title_marker)));
 
 
                         CameraUpdate center = CameraUpdateFactory.newLatLng(new LatLng(arg0.getLatitude(), arg0.getLongitude()));
@@ -86,6 +106,24 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
         });
 
 
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                if(hasMarker == false) {
+                    marker = mMap.addMarker(new MarkerOptions()
+                            .position(latLng)
+                            .title("Marker")
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                    hasMarker = true;
+
+                    optionsbar.setVisibility(View.VISIBLE);
+                }
+
+                else
+                    marker.setPosition(latLng);
+            }
+        });
 
 
 
@@ -117,16 +155,26 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
     @Override
     public void onMapReady(GoogleMap map) {
 
-//        map.addMarker(new MarkerOptions()
-//                .position(new LatLng(21.005, 105.845))
-//                .title("Marker")
-//                .draggable(true)
-//                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-
     }
 
+    public void cancel(View v)
+    {
+        marker.remove();
+        hasMarker = false;
+        optionsbar.setVisibility(View.INVISIBLE);
+    }
 
+    public void accept(View v) {
 
+        sharedpreferences = getSharedPreferences(MyPREFERENCES, MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putFloat(LAT, (float)marker.getPosition().latitude);
+        editor.putFloat(LNG, (float)marker.getPosition().longitude);
+        editor.commit();
+
+        startService(new Intent(getBaseContext(), MyService.class));
+
+    }
 }
 
 
