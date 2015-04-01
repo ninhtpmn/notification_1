@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
+import android.media.MediaPlayer;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -21,11 +23,13 @@ public class ServiceThread extends Thread{
     public static final String TITLE= "title";
     public static final String SUBJECT = "subject";
     public static final String BODY = "body";
+    public static final String INTENT_FL = "android.intent.action.location";
 
     private GetLocation gps;
     private Context context;
     private DBHelper mydb;
     private int id;
+    private MediaPlayer mp;
     public ServiceThread(MyService myService) {
         this.context = myService;
         mydb = new DBHelper(context);
@@ -36,6 +40,7 @@ public class ServiceThread extends Thread{
         Looper.prepare();
 
         gps = new GetLocation(context);
+        mp = MediaPlayer.create(context, R.raw.and_a_happy_new_year_sms);
 
         while(!interrupted()) {
             try {
@@ -81,6 +86,11 @@ public class ServiceThread extends Thread{
                         context.stopService(new Intent(context, MyService.class));
 
                         mydb.deleteLocationAlarm(id);
+
+                        Intent i = new Intent(INTENT_FL);
+                        context.sendBroadcast(i);
+
+                        mp.start();
 
                         this.interrupt();
 

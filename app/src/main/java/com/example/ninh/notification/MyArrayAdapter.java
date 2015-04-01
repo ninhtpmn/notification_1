@@ -20,6 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class MyArrayAdapter extends ArrayAdapter<ItemLocation>{
+
     private Activity context=null;
     private ArrayList<ItemLocation> myArray;
     private int layoutId;
@@ -41,15 +42,16 @@ public class MyArrayAdapter extends ArrayAdapter<ItemLocation>{
             convertView = inflater.inflate(layoutId, null);
             convertView.setMinimumHeight(78);
         }
+
         final TextView stt=(TextView) convertView.findViewById(R.id.id);
         final TextView lat=(TextView) convertView.findViewById(R.id.lat);
         final TextView lng=(TextView) convertView.findViewById(R.id.lng);
 
 
         int stt12 = position+1;
-        stt.setText(""+stt12);
-        lat.setText(""+myArray.get(position).getLat());
-        lng.setText(""+myArray.get(position).getLng());
+        stt.setText(String.valueOf(stt12));
+        lat.setText(String.valueOf(myArray.get(position).getLat()));
+        lng.setText(String.valueOf(myArray.get(position).getLng()));
 
 
 

@@ -38,6 +38,7 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
     private Marker marker;
     private int id;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +48,6 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
 
         GetLocation gl = new GetLocation(this);
         if(!gl.canGetLocation()) gl.showSettingsAlert();
-
 
         Bundle extras = getIntent().getExtras();
         id = extras.getInt(ID);
@@ -63,7 +63,6 @@ public class SetLocationAlarm extends FragmentActivity implements OnMapReadyCall
         mMap.moveCamera(center);
 
         if (mMap != null) {
-
 
             mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
 

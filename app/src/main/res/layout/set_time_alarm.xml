@@ -19,19 +19,22 @@
             android:id="@+id/day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Day" />
+            android:hint="@string/day"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/month"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Month" />
+            android:hint="@string/month"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/year"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Year"/>
+            android:hint="@string/year"
+            android:inputType="number"/>
     </LinearLayout>
 
     <LinearLayout
@@ -43,26 +46,57 @@
             android:id="@+id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Hour"/>
+            android:hint="@string/hour"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/minute"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Minute"/>
+            android:hint="@string/minute"
+            android:inputType="number"/>
 
         <EditText
             android:id="@+id/second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:hint="Second"/>
+            android:hint="@string/second"
+            android:inputType="number"/>
 
     </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    <TextView
+        android:text="@string/set_repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
+
+
+    <EditText
+        android:id="@+id/repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="@string/seconds"
+        android:inputType="number"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:text="@string/default_repeat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Set Alarm"
+        android:text="@string/set_alarm"
         android:onClick="setAlarm"/>
 
 </LinearLayout>

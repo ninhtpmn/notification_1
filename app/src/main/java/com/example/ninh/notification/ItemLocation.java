@@ -6,6 +6,7 @@ import android.graphics.drawable.Drawable;
  * Created by ninh on 12/03/2015.
  */
 public class ItemLocation {
+
     private int id;
     private double lat;
     private double lng;
