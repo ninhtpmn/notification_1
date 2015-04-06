@@ -12,7 +12,12 @@ import android.util.Log;
  * Created by ninh on 16/03/2015.
  */
 public class AlarmReceiver extends BroadcastReceiver{
-    NotificationManager NM;
+
+    public static final String TITLE= "title";
+    public static final String SUBJECT = "subject";
+    public static final String BODY = "body";
+
+    private NotificationManager NM;
     @Override
     public void onReceive(Context context, Intent intent) {
         // TODO Auto-generated method stub
@@ -28,9 +33,9 @@ public class AlarmReceiver extends BroadcastReceiver{
 
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP  | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-        notificationIntent.putExtra("title",title);
-        notificationIntent.putExtra("subject", subject);
-        notificationIntent.putExtra("body",body);
+        notificationIntent.putExtra(TITLE,title);
+        notificationIntent.putExtra(SUBJECT, subject);
+        notificationIntent.putExtra(BODY,body);
 
         PendingIntent pending=PendingIntent.getActivity(context,0, notificationIntent,
                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);

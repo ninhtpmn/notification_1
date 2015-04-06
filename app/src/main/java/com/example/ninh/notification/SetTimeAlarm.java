@@ -20,7 +20,9 @@ import java.util.Date;
 
 public class SetTimeAlarm extends ActionBarActivity {
 
-   public EditText year, month, day, hour, minute, second;
+    public static final String FORMAT = "HH-mm-ss dd-MM-yyyy";
+
+    private EditText year, month, day, hour, minute, second;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,7 @@ public class SetTimeAlarm extends ActionBarActivity {
         int alarm_minute = Integer.parseInt(minute.getText().toString());
         int alarm_second = Integer.parseInt(second.getText().toString());
 
-        Date date = new SimpleDateFormat("HH-mm-ss dd-MM-yyyy").parse(alarm_hour+"-"+alarm_minute+"-"+alarm_second+" "+alarm_day+"-"+alarm_month+"-"+alarm_year);
+        Date date = new SimpleDateFormat(FORMAT).parse(alarm_hour+"-"+alarm_minute+"-"+alarm_second+" "+alarm_day+"-"+alarm_month+"-"+alarm_year);
         System.out.println(date.getTime());
 
         long time= date.getTime();
@@ -56,7 +58,7 @@ public class SetTimeAlarm extends ActionBarActivity {
         Intent intentAlarm= new Intent(this, AlarmReceiver.class);
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, time , PendingIntent.getBroadcast(this, 1, intentAlarm, PendingIntent.FLAG_UPDATE_CURRENT));
-        Toast.makeText(this, "Set Alarm Successful", Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getString(R.string.set_alarm_successful), Toast.LENGTH_LONG).show();
 
         Log.i("SMSSEND", "DK,FL11111s");
     }

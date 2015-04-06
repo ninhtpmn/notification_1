@@ -6,25 +6,36 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
 import android.widget.Toast;
+
+import java.util.ArrayList;
 
 /**
  * Created by ninh on 26/03/2015.
  */
 public class ServiceThread extends Thread{
 
-    SharedPreferences sharedpreferences;
-    GetLocation gps;
-    Context context;
+    public static final String TITLE= "title";
+    public static final String SUBJECT = "subject";
+    public static final String BODY = "body";
+
+    private GetLocation gps;
+    private Context context;
+    private DBHelper mydb;
+    private int id;
     public ServiceThread(MyService myService) {
         this.context = myService;
+        mydb = new DBHelper(context);
     }
 
     public void run() {
 
         Looper.prepare();
+
+        gps = new GetLocation(context);
 
         while(!interrupted()) {
             try {
@@ -33,12 +44,10 @@ public class ServiceThread extends Thread{
                 e.printStackTrace();
             }
 
-//            if (interrupted()) {
-//                return;
-//            }
 
             try {
-                gps = new GetLocation(context);
+
+                    gps.getLocation();
 
                 if(gps.canGetLocation()) {
                     double latitude = gps.getLatitude();
@@ -58,9 +67,9 @@ public class ServiceThread extends Thread{
 
                         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP  | Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
-                        notificationIntent.putExtra("title",title);
-                        notificationIntent.putExtra("subject", subject);
-                        notificationIntent.putExtra("body",body);
+                        notificationIntent.putExtra(TITLE,title);
+                        notificationIntent.putExtra(SUBJECT, subject);
+                        notificationIntent.putExtra(BODY,body);
 
                         PendingIntent pending=PendingIntent.getActivity(context,0, notificationIntent,
                                 PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_UPDATE_CURRENT);
@@ -70,6 +79,8 @@ public class ServiceThread extends Thread{
                         NM.notify(0, notify);
 
                         context.stopService(new Intent(context, MyService.class));
+
+                        mydb.deleteLocationAlarm(id);
 
                         this.interrupt();
 
@@ -85,13 +96,17 @@ public class ServiceThread extends Thread{
     }
 
     private boolean isTagetLocation(double latitude, double longitude) {
-        sharedpreferences = context.getSharedPreferences(SetLocationAlarm.MyPREFERENCES, Context.MODE_PRIVATE);
-        float taglat = sharedpreferences.getFloat(SetLocationAlarm.LAT,0);
-        float taglng = sharedpreferences.getFloat(SetLocationAlarm.LNG,0);
 
-        Log.i("SHPRE_LOC", taglat + ";" + taglng);
-        if( (Math.abs(taglat-(float)latitude) < 0.001) && (Math.abs(taglng-(float)longitude)<0.001) )
-            return  true;
+        ArrayList<ItemLocation> list = mydb.getListLocationAlarm();
+
+        for(int i=0; i<list.size(); i++) {
+            Log.i("SHPRE_LOC", list.get(i).getLat() + ";" + list.get(i).getLng());
+            if ((Math.abs(list.get(i).getLat() -  latitude) < 0.001) && (Math.abs(list.get(i).getLng() -  longitude) < 0.001))
+            {
+                id = list.get(i).getID();
+                return true;
+            }
+        }
         return false;
     }
 

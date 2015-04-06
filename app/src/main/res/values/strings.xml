@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Notification</string>
-
     <string name="set_time">Set time</string>
     <string name="action_settings">Settings</string>
     <string name="title">Thong Bao</string>
@@ -8,11 +7,20 @@
     <string name="body">Chuc ban may man lan sau</string>
     <string name="set_time_alarm">Set Time Alarm</string>
     <string name="set_locate_alarm">Set Location Alarm</string>
+    <string name="set_new_locate_alarm">Set New Location Alarm</string>
     <string name="title_marker">My Location</string>
     <string name="google_api_key">AIzaSyDM1tGPDILZ92M0Ukn_c9BL_REoO8BPjC8</string>
     <string name="cancel">Cancel</string>
     <string name="gps_setting">GPS Setting</string>
     <string name="gps_message">GPS is not enabled. Do you want to go to settings menu?</string>
     <string name="setting">Setting</string>
+    <string name="options">Options</string>
+    <string name="message_options">Choose action you want do to this Alarm</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="id">ID</string>
+    <string name="toast_message_set">Location Alarm has been set</string>
+    <string name="location_alarms_list">Location Alarms List</string>
+    <string name="set_alarm_successful">Set Alarm Successful</string>
 
 </resources>
